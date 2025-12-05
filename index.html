@@ -3,363 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tijger Knuffel Shop</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Reuzen Tijger Knuffel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --accent: #ff8a00;
-    --bg-light: #fafafa;
-    --bg-dark: #1a1a1a;
-    --card-light: #fff;
-    --card-dark: #222;
-    --text-light: #111;
-    --text-dark: #f0f0f0;
-    --shadow: rgba(0,0,0,0.08);
+  --primary: #ff8a00;
+  --bg: #fffaf6;
+  --text: #222;
+  --card: #fff;
+  --accent: #ffb86b;
+  --transition: 0.3s ease;
 }
 
+* { box-sizing: border-box; }
+
 body {
-    margin:0;
-    font-family: 'Inter', sans-serif;
-    background: var(--bg-light);
-    color: var(--text-light);
-    transition: background 0.3s, color 0.3s;
+  margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: background var(--transition), color var(--transition);
 }
 
 header {
-    position: sticky;
-    top:0;
-    background: var(--card-light);
-    display:flex;
-    justify-content: space-between;
-    align-items:center;
-    padding:16px 32px;
-    box-shadow: 0 2px 12px var(--shadow);
-    z-index:1000;
+  display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;
+  background: linear-gradient(90deg,#fff7f0,#fff9f3); border-bottom: 1px solid #ffe6cc;
+  position: sticky; top: 0; z-index: 1000;
+  transition: background var(--transition);
 }
 
-header .logo {
-    font-weight: 700;
-    font-size: 22px;
-    letter-spacing:1px;
+header.scrolled { background: #fff3e6; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+header .brand { font-weight:700; font-size:18px; }
+nav a { margin-left: 15px; text-decoration:none; color: #666; font-weight:500; transition: color var(--transition);}
+nav a:hover { color: var(--primary); }
+.theme-toggle { margin-left:15px; cursor:pointer; padding:6px 12px; border-radius:8px; border:1px solid #ccc; background:white; transition: all var(--transition);}
+.theme-toggle:hover { background: var(--accent); color:white; }
+
+.container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
+.products { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+.product-img { flex:1 1 300px; max-width:400px; background:#ddd; border-radius:12px; display:flex; align-items:center; justify-content:center; height:400px;
+  transform: translateX(-20px); opacity:0; animation: slideIn 0.6s forwards;}
+.product-desc { flex:2 1 400px; display:flex; flex-direction:column; gap:12px; opacity:0; transform: translateX(20px); animation: slideIn 0.6s 0.2s forwards; }
+
+.product-desc h1 { margin:0; font-size:28px; }
+.product-desc p { margin:0; line-height:1.5; }
+
+.btn { padding:14px 20px; background:black; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:700; margin-top:10px; transition: all var(--transition); }
+.btn:hover { transform: translateY(-2px); background: var(--primary); }
+
+.cart-box { margin-top:20px; padding:20px; border-radius:10px; background:var(--card); border:1px solid #ccc; display:none; opacity:0; transform: translateY(-20px); transition: all var(--transition); }
+
+.info { margin-top:40px; background:var(--card); padding:20px; border-radius:12px; line-height:1.5; opacity:0; transform: translateY(20px); animation: fadeIn 0.6s 0.4s forwards; }
+
+footer { text-align:center; padding:20px; margin-top:40px; color:#666; font-size:14px; }
+
+@keyframes slideIn {
+  to { transform: translateX(0); opacity:1; }
+}
+@keyframes fadeIn {
+  to { opacity:1; transform: translateY(0); }
 }
 
-header nav {
-    display:flex;
-    align-items:center;
-    gap: 20px;
-}
-
-header nav a {
-    text-decoration:none;
-    color: var(--text-light);
-    font-weight:600;
-    position: relative;
-}
-
-header nav a::after {
-    content:'';
-    position:absolute;
-    bottom:-4px;
-    left:0;
-    width:0%;
-    height:2px;
-    background: var(--accent);
-    transition: 0.3s;
-}
-
-header nav a:hover::after {
-    width:100%;
-}
-
-.theme-btn, .cart-btn {
-    cursor:pointer;
-    border:none;
-    background:none;
-    display:flex;
-    align-items:center;
-    gap:6px;
-    font-weight:700;
-}
-
-.theme-btn span {
-    width:18px;
-    height:18px;
-}
-
-.cart-btn {
-    position:relative;
-}
-
-.cart-count {
-    position:absolute;
-    top:-6px;
-    right:-8px;
-    background:red;
-    color:white;
-    font-size:12px;
-    padding:2px 6px;
-    border-radius:50%;
-    font-weight:600;
-}
-
-main {
-    max-width: 1200px;
-    margin:auto;
-    padding:32px;
-    display:grid;
-    gap:32px;
-}
-
-.products {
-    display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-    gap:32px;
-}
-
-.card {
-    background: var(--card-light);
-    border-radius:16px;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    box-shadow:0 8px 24px var(--shadow);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-6px);
-    box-shadow:0 12px 36px var(--shadow);
-}
-
-.card img {
-    width:100%;
-    height:220px;
-    object-fit:cover;
-}
-
-.card-body {
-    padding:16px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-
-.card-body h3 {
-    margin:0;
-    font-size:20px;
-    font-weight:700;
-}
-
-.card-body p {
-    margin:0;
-    color:#555;
-    font-size:14px;
-    line-height:1.4;
-}
-
-.card-body .price {
-    font-weight:700;
-    font-size:18px;
-    color: var(--accent);
-}
-
-.card-body button {
-    background: var(--accent);
-    color:white;
-    border:none;
-    padding:10px 14px;
-    font-weight:700;
-    border-radius:12px;
-    cursor:pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card-body button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow);
-}
-
-/* cart overlay */
-.cart-overlay {
-    position:fixed;
-    top:0;
-    right:-100%;
-    width:380px;
-    max-width:90%;
-    height:100%;
-    background:var(--card-light);
-    box-shadow: -8px 0 24px var(--shadow);
-    padding:24px;
-    transition:right 0.4s ease;
-    display:flex;
-    flex-direction:column;
-    z-index:2000;
-}
-
-.cart-overlay.open {
-    right:0;
-}
-
-.cart-overlay h2 {
-    margin-top:0;
-    font-size:22px;
-    font-weight:700;
-}
-
-.cart-item {
-    display:flex;
-    justify-content: space-between;
-    align-items:center;
-    margin-bottom:16px;
-}
-
-.cart-item span {
-    font-size:14px;
-}
-
-.cart-item button {
-    background:#eee;
-    border:none;
-    border-radius:8px;
-    padding:4px 8px;
-    cursor:pointer;
-}
-
-.close-cart {
-    align-self:flex-end;
-    cursor:pointer;
-    background:none;
-    border:none;
-    font-size:20px;
-    margin-bottom:16px;
-}
-
-/* dark mode */
-body.dark {
-    background: var(--bg-dark);
-    color: var(--text-dark);
-}
-
-body.dark .card {
-    background: var(--card-dark);
-}
-
-body.dark header {
-    background: var(--card-dark);
-}
-
-body.dark nav a {
-    color: var(--text-dark);
-}
-
-/* responsive */
-@media(max-width:768px){
-    main {
-        padding:16px;
-        gap:24px;
-    }
-}
+@media(max-width:800px){.products{flex-direction:column;}.product-img{max-width:100%; height:300px;}}
 </style>
 </head>
 <body>
+
 <header>
-    <div class="logo">Tijger Knuffel</div>
-    <nav>
-        <a href="#product">Producten</a>
-        <a href="#info">Info</a>
-        <span class="cart-btn" id="cartBtn">🛒<span class="cart-count" id="cartCount">0</span></span>
-        <button class="theme-btn" id="themeBtn">🌙</button>
-    </nav>
+  <div class="brand">Tijger Knuffel Co.</div>
+  <nav>
+    <a href="#product">Product</a>
+    <a href="#info">Info</a>
+    <a href="#cart">Winkelmandje</a>
+    <button class="theme-toggle" id="themeToggle">Thema</button>
+  </nav>
 </header>
 
-<main>
-    <div class="products" id="productList">
-        <div class="card" data-id="tijger1">
-            <img src="https://via.placeholder.com/400x220" alt="Reuzen Tijger Knuffel">
-            <div class="card-body">
-                <h3>Reuzen Tijger Knuffel</h3>
-                <p>1 meter, super zacht en knuffelbaar</p>
-                <p class="price">€50</p>
-                <button class="add-btn">Voeg toe aan mandje</button>
-            </div>
-        </div>
-        <!-- Voeg hier extra producten toe -->
-    </div>
-</main>
+<div class="container">
 
-<div class="cart-overlay" id="cartOverlay">
-    <button class="close-cart" id="closeCart">✖</button>
-    <h2>Winkelmandje</h2>
-    <div id="cartItems">Je mandje is leeg.</div>
-    <p id="cartTotal"></p>
+  <main id="product">
+    <div class="products">
+      <div class="product-img" id="productImage">Foto hier</div>
+      <div class="product-desc">
+        <h1>Reuzen Tijger Knuffel</h1>
+        <p>Deze zachte tijgerknuffel is <b>1 meter</b> lang. Perfect als decoratie of mega knuffelmaatje.</p>
+        <p><b>Prijs:</b> €50</p>
+        <button id="addCart" class="btn">In winkelmandje</button>
+        <button id="clearCart" class="btn" style="background:#777;">Winkelmandje leegmaken</button>
+        <div id="cartBox" class="cart-box">
+          <h3>Winkelmandje</h3>
+          <p id="cartAmount"></p>
+          <p id="shippingInfo"></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="info" class="info">
+    <h2>Waarom knuffeltijgers verkopen?</h2>
+    <p>Veel kinderen zijn bang, vooral in de avond. Ons doel is dat de kinderen zich veiliger voelen als ze gaan slapen. Tijgers zijn vaak in kinderfilms sterke dieren met veel kracht, hierdoor gaan kinderen zich veiliger voelen als er zo’n sterk beest naast hun ligt.</p>
+    <p>Hij wordt verkocht in een mooie grote doos met doorzichtige voorkant. In de voorkant zit een klein gat waardoor je de zachte vacht kan voelen. Deze tijger heeft ook zijn eigen specialiteiten: je kan bijvoorbeeld aan zijn staart trekken, dan komt er licht uit de ogen van deze tijger.</p>
+  </section>
+
 </div>
 
+<footer>© Tijger Knuffel Co. — Demo site</footer>
+
 <script>
-let cart = {};
+let price = 50;
+let cartTotal = 0;
+const addBtn = document.getElementById("addCart");
+const clearBtn = document.getElementById("clearCart");
+const cartBox = document.getElementById("cartBox");
+const cartAmount = document.getElementById("cartAmount");
+const shippingInfo = document.getElementById("shippingInfo");
 
-const cartBtn = document.getElementById('cartBtn');
-const cartOverlay = document.getElementById('cartOverlay');
-const closeCart = document.getElementById('closeCart');
-const cartItems = document.getElementById('cartItems');
-const cartCount = document.getElementById('cartCount');
-const cartTotalEl = document.getElementById('cartTotal');
+addBtn.addEventListener("click", () => { cartTotal += price; showCart(); });
+clearBtn.addEventListener("click", () => { cartTotal = 0; showCart(); });
 
-function updateCart(){
-    const items = Object.values(cart);
-    if(items.length===0){
-        cartItems.innerHTML='Je mandje is leeg.';
-        cartCount.textContent='0';
-        cartTotalEl.textContent='';
-        return;
-    }
-    cartItems.innerHTML='';
-    let total=0;
-    items.forEach(item=>{
-        const div=document.createElement('div');
-        div.classList.add('cart-item');
-        div.innerHTML=`
-            <span>${item.name} (€${item.price}) x ${item.qty}</span>
-            <span>
-                <button onclick="decrease('${item.id}')">-</button>
-                <button onclick="increase('${item.id}')">+</button>
-                <button onclick="removeItem('${item.id}')">🗑️</button>
-            </span>
-        `;
-        cartItems.appendChild(div);
-        total+=item.price*item.qty;
-    });
-    let shipping = total>=100?'✔ Gratis verzending':'Verzendkosten: €5';
-    cartTotalEl.textContent=`Totaal: €${total} | ${shipping}`;
-    cartCount.textContent=items.reduce((a,i)=>a+i.qty,0);
+function showCart(){
+  if(cartTotal<=0){ cartBox.style.display="none"; return; }
+  cartBox.style.display="block";
+  setTimeout(()=>{ cartBox.style.opacity=1; cartBox.style.transform='translateY(0)'; },10);
+  cartAmount.textContent="Totaal: €"+cartTotal;
+  shippingInfo.textContent = cartTotal>=100 ? "✔ Gratis verzending!" : "Verzendkosten: €5 (gratis vanaf €100)";
 }
 
-function addItem(id,name,price){
-    if(cart[id]){cart[id].qty++;}else{cart[id]={id,name,price,qty:1};}
-    updateCart();
-}
-
-function removeItem(id){delete cart[id];updateCart();}
-function increase(id){cart[id].qty++;updateCart();}
-function decrease(id){cart[id].qty--;if(cart[id].qty<=0)removeItem(id);}
-
-document.querySelectorAll('.add-btn').forEach(btn=>{
-    btn.addEventListener('click',e=>{
-        const card=e.target.closest('.card');
-        const id=card.dataset.id;
-        const name=card.querySelector('h3').innerText;
-        const price=parseFloat(card.querySelector('.price').innerText.replace('€',''));
-        addItem(id,name,price);
-    });
+// thema toggle
+const themeToggle = document.getElementById("themeToggle");
+themeToggle.addEventListener("click", ()=>{
+  if(document.body.style.background==="black"){
+    document.body.style.background="var(--bg)";
+    document.body.style.color="var(--text)";
+  } else {
+    document.body.style.background="black";
+    document.body.style.color="white";
+  }
 });
 
-cartBtn.addEventListener('click',()=>cartOverlay.classList.add('open'));
-closeCart.addEventListener('click',()=>cartOverlay.classList.remove('open'));
-
-const themeBtn=document.getElementById('themeBtn');
-themeBtn.addEventListener('click',()=>{
-    document.body.classList.toggle('dark');
-    themeBtn.textContent = document.body.classList.contains('dark')?'☀️':'🌙';
+// scroll anim header
+window.addEventListener('scroll', ()=>{
+  document.querySelector('header').classList.toggle('scrolled', window.scrollY>20);
 });
 </script>
+
 </body>
 </html>
