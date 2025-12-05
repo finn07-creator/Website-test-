@@ -1,127 +1,306 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reuzen Tijger Knuffel</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tijger Knuffel Shop</title>
+<style>
+    :root {
+        --bg-light: #fafafa;
+        --bg-dark: #1e1e1e;
+        --text-light: #222;
+        --text-dark: #f0f0f0;
+        --accent: #ff8a00;
+    }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #fafafa;
-            color: #222;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: var(--bg-light);
+        color: var(--text-light);
+        transition: background 0.3s, color 0.3s;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-        }
+    header {
+        position: sticky;
+        top: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
 
-        h1 {
-            text-align: center;
-        }
+    .logo {
+        font-weight: bold;
+        font-size: 20px;
+    }
 
-        .product-img {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            background: #ddd;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 20px;
-        }
+    nav a {
+        margin-left: 16px;
+        text-decoration: none;
+        color: var(--text-light);
+        font-weight: 500;
+    }
 
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background: black;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            margin-top: 15px;
-            cursor: pointer;
-        }
+    .theme-btn {
+        margin-left: 16px;
+        cursor: pointer;
+        padding: 6px 12px;
+        border: 1px solid var(--accent);
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+    }
 
-        .btn:active {
-            opacity: 0.8;
-        }
+    .cart-btn {
+        position: relative;
+        cursor: pointer;
+        font-weight: bold;
+    }
 
-        .cart-box {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 10px;
-            background: white;
-            border: 1px solid #ccc;
-        }
-    </style>
+    .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: red;
+        color: white;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 50%;
+    }
+
+    main {
+        padding: 24px;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card img {
+        width: 100%;
+        border-radius: 12px;
+        height: 200px;
+        object-fit: cover;
+        margin-bottom: 12px;
+    }
+
+    .card h3 {
+        margin: 0 0 8px 0;
+    }
+
+    .card p {
+        margin: 0 0 12px 0;
+        color: #555;
+    }
+
+    .card button {
+        padding: 10px 14px;
+        border: none;
+        background: var(--accent);
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    /* Cart Overlay */
+    .cart-overlay {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 320px;
+        height: 100%;
+        background: #fff;
+        box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+        padding: 24px;
+        transition: right 0.3s;
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cart-overlay.open {
+        right: 0;
+    }
+
+    .cart-overlay h2 {
+        margin-top: 0;
+    }
+
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        align-items: center;
+    }
+
+    .cart-item button {
+        margin-left: 6px;
+        background: #eee;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .close-cart {
+        align-self: flex-end;
+        margin-bottom: 16px;
+        cursor: pointer;
+        font-size: 18px;
+        background: none;
+        border: none;
+    }
+
+    /* Dark mode */
+    body.dark {
+        background: var(--bg-dark);
+        color: var(--text-dark);
+    }
+
+    body.dark .card {
+        background: #2c2c2c;
+    }
+
+    body.dark nav a {
+        color: var(--text-dark);
+    }
+</style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Reuzen Tijger Knuffel</h1>
+<header>
+    <div class="logo">Tijger Knuffel Co.</div>
+    <nav>
+        <a href="#product">Producten</a>
+        <a href="#info">Info</a>
+        <span class="cart-btn" id="cartBtn">🛒<span class="cart-count" id="cartCount">0</span></span>
+        <button class="theme-btn" id="themeBtn">Thema</button>
+    </nav>
+</header>
 
-        <div class="product-img">
-            *Hier komt jouw foto*
-        </div>
-
-        <p>
-            Deze zachte tijgerknuffel is **1 meter** lang. Perfect als decoratie of als mega knuffelmaatje.
-        </p>
-
-        <p><b>Prijs:</b> €50</p>
-
-        <button id="addCart" class="btn">In winkelmandje</button>
-        <button id="clearCart" class="btn" style="background:#777;">Winkelmandje leegmaken</button>
-
-        <div id="cartBox" class="cart-box" style="display:none;">
-            <h3>Winkelmandje</h3>
-            <p id="cartAmount"></p>
-            <p id="shippingInfo"></p>
+<main>
+    <div class="products" id="productList">
+        <!-- Voorbeeld product -->
+        <div class="card" data-id="tijger1">
+            <img src="https://via.placeholder.com/300x200" alt="Knuffel Tijger">
+            <h3>Reuzen Tijger Knuffel</h3>
+            <p>1 meter, super zacht en knuffelbaar</p>
+            <p><b>€50</b></p>
+            <button class="add-btn">Voeg toe aan mandje</button>
         </div>
     </div>
+</main>
 
-    <script>
-        let price = 50;
-        let cartTotal = 0;
+<div class="cart-overlay" id="cartOverlay">
+    <button class="close-cart" id="closeCart">✖</button>
+    <h2>Winkelmandje</h2>
+    <div id="cartItems">
+        Je mandje is leeg.
+    </div>
+    <p id="cartTotal"></p>
+</div>
 
-        const addBtn = document.getElementById("addCart");
-        const clearBtn = document.getElementById("clearCart");
-        const cartBox = document.getElementById("cartBox");
-        const cartAmount = document.getElementById("cartAmount");
-        const shippingInfo = document.getElementById("shippingInfo");
+<script>
+    // Cart logic
+    let cart = {};
 
-        addBtn.addEventListener("click", () => {
-            cartTotal += price;
-            updateCart();
-        });
+    const cartBtn = document.getElementById('cartBtn');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const closeCart = document.getElementById('closeCart');
+    const cartItems = document.getElementById('cartItems');
+    const cartCount = document.getElementById('cartCount');
+    const cartTotalEl = document.getElementById('cartTotal');
 
-        clearBtn.addEventListener("click", () => {
-            cartTotal = 0;
-            updateCart();
-        });
-
-        function updateCart() {
-            if (cartTotal <= 0) {
-                cartBox.style.display = "none";
-                return;
-            }
-
-            cartBox.style.display = "block";
-            cartAmount.textContent = "Totaal: €" + cartTotal;
-
-            if (cartTotal >= 100) {
-                shippingInfo.textContent = "✔ Gratis verzending!";
-            } else {
-                shippingInfo.textContent = "Verzendkosten: €5 (gratis vanaf €100)";
-            }
+    function updateCart() {
+        const items = Object.values(cart);
+        if(items.length === 0){
+            cartItems.innerHTML = 'Je mandje is leeg.';
+            cartCount.textContent = '0';
+            cartTotalEl.textContent = '';
+            return;
         }
-    </script>
+
+        cartItems.innerHTML = '';
+        let total = 0;
+        items.forEach(item=>{
+            const div = document.createElement('div');
+            div.classList.add('cart-item');
+            div.innerHTML = `
+                <span>${item.name} (€${item.price}) x ${item.qty}</span>
+                <span>
+                    <button onclick="decrease('${item.id}')">-</button>
+                    <button onclick="increase('${item.id}')">+</button>
+                    <button onclick="removeItem('${item.id}')">🗑️</button>
+                </span>
+            `;
+            cartItems.appendChild(div);
+            total += item.price * item.qty;
+        });
+
+        let shipping = total >= 100 ? '✔ Gratis verzending' : 'Verzendkosten: €5';
+        cartTotalEl.textContent = `Totaal: €${total} | ${shipping}`;
+        cartCount.textContent = items.reduce((a,i)=>a+i.qty,0);
+    }
+
+    function addItem(id,name,price){
+        if(cart[id]){
+            cart[id].qty++;
+        } else {
+            cart[id] = {id,name,price,qty:1};
+        }
+        updateCart();
+    }
+
+    function removeItem(id){
+        delete cart[id];
+        updateCart();
+    }
+
+    function increase(id){
+        cart[id].qty++;
+        updateCart();
+    }
+
+    function decrease(id){
+        cart[id].qty--;
+        if(cart[id].qty<=0) removeItem(id);
+        updateCart();
+    }
+
+    document.querySelectorAll('.add-btn').forEach(btn=>{
+        btn.addEventListener('click',(e)=>{
+            const card = e.target.closest('.card');
+            const id = card.dataset.id;
+            const name = card.querySelector('h3').innerText;
+            const price = parseFloat(card.querySelector('p b').innerText.replace('€',''));
+            addItem(id,name,price);
+        });
+    });
+
+    cartBtn.addEventListener('click',()=>{cartOverlay.classList.add('open')});
+    closeCart.addEventListener('click',()=>{cartOverlay.classList.remove('open')});
+
+    // Theme switch
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click',()=>{
+        document.body.classList.toggle('dark');
+    });
+</script>
 </body>
 </html>
