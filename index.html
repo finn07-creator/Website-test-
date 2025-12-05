@@ -4,303 +4,362 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tijger Knuffel Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-    :root {
-        --bg-light: #fafafa;
-        --bg-dark: #1e1e1e;
-        --text-light: #222;
-        --text-dark: #f0f0f0;
-        --accent: #ff8a00;
-    }
+:root {
+    --accent: #ff8a00;
+    --bg-light: #fafafa;
+    --bg-dark: #1a1a1a;
+    --card-light: #fff;
+    --card-dark: #222;
+    --text-light: #111;
+    --text-dark: #f0f0f0;
+    --shadow: rgba(0,0,0,0.08);
+}
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: var(--bg-light);
-        color: var(--text-light);
-        transition: background 0.3s, color 0.3s;
-    }
+body {
+    margin:0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+}
 
-    header {
-        position: sticky;
-        top: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px 24px;
-        background: #fff;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        z-index: 1000;
-    }
+header {
+    position: sticky;
+    top:0;
+    background: var(--card-light);
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding:16px 32px;
+    box-shadow: 0 2px 12px var(--shadow);
+    z-index:1000;
+}
 
-    .logo {
-        font-weight: bold;
-        font-size: 20px;
-    }
+header .logo {
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing:1px;
+}
 
-    nav a {
-        margin-left: 16px;
-        text-decoration: none;
-        color: var(--text-light);
-        font-weight: 500;
-    }
+header nav {
+    display:flex;
+    align-items:center;
+    gap: 20px;
+}
 
-    .theme-btn {
-        margin-left: 16px;
-        cursor: pointer;
-        padding: 6px 12px;
-        border: 1px solid var(--accent);
-        background: var(--accent);
-        color: #fff;
-        border-radius: 8px;
-    }
+header nav a {
+    text-decoration:none;
+    color: var(--text-light);
+    font-weight:600;
+    position: relative;
+}
 
-    .cart-btn {
-        position: relative;
-        cursor: pointer;
-        font-weight: bold;
-    }
+header nav a::after {
+    content:'';
+    position:absolute;
+    bottom:-4px;
+    left:0;
+    width:0%;
+    height:2px;
+    background: var(--accent);
+    transition: 0.3s;
+}
 
-    .cart-count {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        background: red;
-        color: white;
-        font-size: 12px;
-        padding: 2px 6px;
-        border-radius: 50%;
-    }
+header nav a:hover::after {
+    width:100%;
+}
 
+.theme-btn, .cart-btn {
+    cursor:pointer;
+    border:none;
+    background:none;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+}
+
+.theme-btn span {
+    width:18px;
+    height:18px;
+}
+
+.cart-btn {
+    position:relative;
+}
+
+.cart-count {
+    position:absolute;
+    top:-6px;
+    right:-8px;
+    background:red;
+    color:white;
+    font-size:12px;
+    padding:2px 6px;
+    border-radius:50%;
+    font-weight:600;
+}
+
+main {
+    max-width: 1200px;
+    margin:auto;
+    padding:32px;
+    display:grid;
+    gap:32px;
+}
+
+.products {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap:32px;
+}
+
+.card {
+    background: var(--card-light);
+    border-radius:16px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 8px 24px var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow:0 12px 36px var(--shadow);
+}
+
+.card img {
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.card-body {
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.card-body h3 {
+    margin:0;
+    font-size:20px;
+    font-weight:700;
+}
+
+.card-body p {
+    margin:0;
+    color:#555;
+    font-size:14px;
+    line-height:1.4;
+}
+
+.card-body .price {
+    font-weight:700;
+    font-size:18px;
+    color: var(--accent);
+}
+
+.card-body button {
+    background: var(--accent);
+    color:white;
+    border:none;
+    padding:10px 14px;
+    font-weight:700;
+    border-radius:12px;
+    cursor:pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-body button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+/* cart overlay */
+.cart-overlay {
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:380px;
+    max-width:90%;
+    height:100%;
+    background:var(--card-light);
+    box-shadow: -8px 0 24px var(--shadow);
+    padding:24px;
+    transition:right 0.4s ease;
+    display:flex;
+    flex-direction:column;
+    z-index:2000;
+}
+
+.cart-overlay.open {
+    right:0;
+}
+
+.cart-overlay h2 {
+    margin-top:0;
+    font-size:22px;
+    font-weight:700;
+}
+
+.cart-item {
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.cart-item span {
+    font-size:14px;
+}
+
+.cart-item button {
+    background:#eee;
+    border:none;
+    border-radius:8px;
+    padding:4px 8px;
+    cursor:pointer;
+}
+
+.close-cart {
+    align-self:flex-end;
+    cursor:pointer;
+    background:none;
+    border:none;
+    font-size:20px;
+    margin-bottom:16px;
+}
+
+/* dark mode */
+body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+body.dark .card {
+    background: var(--card-dark);
+}
+
+body.dark header {
+    background: var(--card-dark);
+}
+
+body.dark nav a {
+    color: var(--text-dark);
+}
+
+/* responsive */
+@media(max-width:768px){
     main {
-        padding: 24px;
-        max-width: 1000px;
-        margin: auto;
+        padding:16px;
+        gap:24px;
     }
-
-    .products {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 24px;
-    }
-
-    .card {
-        background: #fff;
-        border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .card img {
-        width: 100%;
-        border-radius: 12px;
-        height: 200px;
-        object-fit: cover;
-        margin-bottom: 12px;
-    }
-
-    .card h3 {
-        margin: 0 0 8px 0;
-    }
-
-    .card p {
-        margin: 0 0 12px 0;
-        color: #555;
-    }
-
-    .card button {
-        padding: 10px 14px;
-        border: none;
-        background: var(--accent);
-        color: white;
-        font-weight: bold;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    /* Cart Overlay */
-    .cart-overlay {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 320px;
-        height: 100%;
-        background: #fff;
-        box-shadow: -4px 0 12px rgba(0,0,0,0.1);
-        padding: 24px;
-        transition: right 0.3s;
-        z-index: 2000;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .cart-overlay.open {
-        right: 0;
-    }
-
-    .cart-overlay h2 {
-        margin-top: 0;
-    }
-
-    .cart-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        align-items: center;
-    }
-
-    .cart-item button {
-        margin-left: 6px;
-        background: #eee;
-        color: #333;
-        font-size: 14px;
-    }
-
-    .close-cart {
-        align-self: flex-end;
-        margin-bottom: 16px;
-        cursor: pointer;
-        font-size: 18px;
-        background: none;
-        border: none;
-    }
-
-    /* Dark mode */
-    body.dark {
-        background: var(--bg-dark);
-        color: var(--text-dark);
-    }
-
-    body.dark .card {
-        background: #2c2c2c;
-    }
-
-    body.dark nav a {
-        color: var(--text-dark);
-    }
+}
 </style>
 </head>
 <body>
 <header>
-    <div class="logo">Tijger Knuffel Co.</div>
+    <div class="logo">Tijger Knuffel</div>
     <nav>
         <a href="#product">Producten</a>
         <a href="#info">Info</a>
         <span class="cart-btn" id="cartBtn">🛒<span class="cart-count" id="cartCount">0</span></span>
-        <button class="theme-btn" id="themeBtn">Thema</button>
+        <button class="theme-btn" id="themeBtn">🌙</button>
     </nav>
 </header>
 
 <main>
     <div class="products" id="productList">
-        <!-- Voorbeeld product -->
         <div class="card" data-id="tijger1">
-            <img src="https://via.placeholder.com/300x200" alt="Knuffel Tijger">
-            <h3>Reuzen Tijger Knuffel</h3>
-            <p>1 meter, super zacht en knuffelbaar</p>
-            <p><b>€50</b></p>
-            <button class="add-btn">Voeg toe aan mandje</button>
+            <img src="https://via.placeholder.com/400x220" alt="Reuzen Tijger Knuffel">
+            <div class="card-body">
+                <h3>Reuzen Tijger Knuffel</h3>
+                <p>1 meter, super zacht en knuffelbaar</p>
+                <p class="price">€50</p>
+                <button class="add-btn">Voeg toe aan mandje</button>
+            </div>
         </div>
+        <!-- Voeg hier extra producten toe -->
     </div>
 </main>
 
 <div class="cart-overlay" id="cartOverlay">
     <button class="close-cart" id="closeCart">✖</button>
     <h2>Winkelmandje</h2>
-    <div id="cartItems">
-        Je mandje is leeg.
-    </div>
+    <div id="cartItems">Je mandje is leeg.</div>
     <p id="cartTotal"></p>
 </div>
 
 <script>
-    // Cart logic
-    let cart = {};
+let cart = {};
 
-    const cartBtn = document.getElementById('cartBtn');
-    const cartOverlay = document.getElementById('cartOverlay');
-    const closeCart = document.getElementById('closeCart');
-    const cartItems = document.getElementById('cartItems');
-    const cartCount = document.getElementById('cartCount');
-    const cartTotalEl = document.getElementById('cartTotal');
+const cartBtn = document.getElementById('cartBtn');
+const cartOverlay = document.getElementById('cartOverlay');
+const closeCart = document.getElementById('closeCart');
+const cartItems = document.getElementById('cartItems');
+const cartCount = document.getElementById('cartCount');
+const cartTotalEl = document.getElementById('cartTotal');
 
-    function updateCart() {
-        const items = Object.values(cart);
-        if(items.length === 0){
-            cartItems.innerHTML = 'Je mandje is leeg.';
-            cartCount.textContent = '0';
-            cartTotalEl.textContent = '';
-            return;
-        }
-
-        cartItems.innerHTML = '';
-        let total = 0;
-        items.forEach(item=>{
-            const div = document.createElement('div');
-            div.classList.add('cart-item');
-            div.innerHTML = `
-                <span>${item.name} (€${item.price}) x ${item.qty}</span>
-                <span>
-                    <button onclick="decrease('${item.id}')">-</button>
-                    <button onclick="increase('${item.id}')">+</button>
-                    <button onclick="removeItem('${item.id}')">🗑️</button>
-                </span>
-            `;
-            cartItems.appendChild(div);
-            total += item.price * item.qty;
-        });
-
-        let shipping = total >= 100 ? '✔ Gratis verzending' : 'Verzendkosten: €5';
-        cartTotalEl.textContent = `Totaal: €${total} | ${shipping}`;
-        cartCount.textContent = items.reduce((a,i)=>a+i.qty,0);
+function updateCart(){
+    const items = Object.values(cart);
+    if(items.length===0){
+        cartItems.innerHTML='Je mandje is leeg.';
+        cartCount.textContent='0';
+        cartTotalEl.textContent='';
+        return;
     }
-
-    function addItem(id,name,price){
-        if(cart[id]){
-            cart[id].qty++;
-        } else {
-            cart[id] = {id,name,price,qty:1};
-        }
-        updateCart();
-    }
-
-    function removeItem(id){
-        delete cart[id];
-        updateCart();
-    }
-
-    function increase(id){
-        cart[id].qty++;
-        updateCart();
-    }
-
-    function decrease(id){
-        cart[id].qty--;
-        if(cart[id].qty<=0) removeItem(id);
-        updateCart();
-    }
-
-    document.querySelectorAll('.add-btn').forEach(btn=>{
-        btn.addEventListener('click',(e)=>{
-            const card = e.target.closest('.card');
-            const id = card.dataset.id;
-            const name = card.querySelector('h3').innerText;
-            const price = parseFloat(card.querySelector('p b').innerText.replace('€',''));
-            addItem(id,name,price);
-        });
+    cartItems.innerHTML='';
+    let total=0;
+    items.forEach(item=>{
+        const div=document.createElement('div');
+        div.classList.add('cart-item');
+        div.innerHTML=`
+            <span>${item.name} (€${item.price}) x ${item.qty}</span>
+            <span>
+                <button onclick="decrease('${item.id}')">-</button>
+                <button onclick="increase('${item.id}')">+</button>
+                <button onclick="removeItem('${item.id}')">🗑️</button>
+            </span>
+        `;
+        cartItems.appendChild(div);
+        total+=item.price*item.qty;
     });
+    let shipping = total>=100?'✔ Gratis verzending':'Verzendkosten: €5';
+    cartTotalEl.textContent=`Totaal: €${total} | ${shipping}`;
+    cartCount.textContent=items.reduce((a,i)=>a+i.qty,0);
+}
 
-    cartBtn.addEventListener('click',()=>{cartOverlay.classList.add('open')});
-    closeCart.addEventListener('click',()=>{cartOverlay.classList.remove('open')});
+function addItem(id,name,price){
+    if(cart[id]){cart[id].qty++;}else{cart[id]={id,name,price,qty:1};}
+    updateCart();
+}
 
-    // Theme switch
-    const themeBtn = document.getElementById('themeBtn');
-    themeBtn.addEventListener('click',()=>{
-        document.body.classList.toggle('dark');
+function removeItem(id){delete cart[id];updateCart();}
+function increase(id){cart[id].qty++;updateCart();}
+function decrease(id){cart[id].qty--;if(cart[id].qty<=0)removeItem(id);}
+
+document.querySelectorAll('.add-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+        const card=e.target.closest('.card');
+        const id=card.dataset.id;
+        const name=card.querySelector('h3').innerText;
+        const price=parseFloat(card.querySelector('.price').innerText.replace('€',''));
+        addItem(id,name,price);
     });
+});
+
+cartBtn.addEventListener('click',()=>cartOverlay.classList.add('open'));
+closeCart.addEventListener('click',()=>cartOverlay.classList.remove('open'));
+
+const themeBtn=document.getElementById('themeBtn');
+themeBtn.addEventListener('click',()=>{
+    document.body.classList.toggle('dark');
+    themeBtn.textContent = document.body.classList.contains('dark')?'☀️':'🌙';
+});
 </script>
 </body>
 </html>
