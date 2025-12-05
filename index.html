@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tijger Knuffel - Shop</title>
+    <style>
+        :root {
+            --accent: #ff8a00;
+            --muted: #666;
+            --bg: #fffaf6
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #111
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: linear-gradient(90deg, #fff7f0, #fff9f3);
+            border-bottom: 1px solid #ffe6cc
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(180deg, #fff, #ffd9b2);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06)
+        }
+
+        nav a {
+            margin-left: 12px;
+            text-decoration: none;
+            color: var(--muted)
+        }
+
+        main {
+            padding: 22px;
+            max-width: 1000px;
+            margin: 0 auto
+        }
+
+        /* product */
+        .product {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: center
+        }
+
+        .card {
+            background: #fff;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06)
+        }
+
+        .img-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px
+        }
+
+        .name {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 8px 0
+        }
+
+        .price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 20px
+        }
+
+        .desc {
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        button {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .qty {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .qty button {
+            background: #fff;
+            border: 1px solid #ffd2a6;
+            color: var(--accent);
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center
+        }
+
+        /* cart */
+        .cart-badge {
+            background: #ff3b30;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 100px;
+            font-weight: 700;
+            margin-left: 8px;
+            font-size: 13px
+        }
+
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .cart-item .thumb {
+            width: 76px;
+            height: 76px;
+            border-radius: 10px;
+            background: #fff2e6;
+            display: grid;
+            place-items: center
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        /* cookie banner */
+        .cookie-banner {
+            position: fixed;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
+            background: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .cookie-actions {
+            display: flex;
+            gap: 8px
+        }
+
+        footer {
+            padding: 24px;
+            text-align: center;
+            color: var(--muted)
+        }
+
+        /* responsive */
+        @media (max-width:800px) {
+            .product {
+                grid-template-columns: 1fr;
+            }
+
+            nav a {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <div class="logo" aria-hidden>
+                <!-- simpel tijger-icoon -->
+                <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="64" height="64" rx="10" fill="#fff3e6" />
+                    <g transform="translate(12,8)">
+                        <ellipse cx="20" cy="18" rx="14" ry="12" fill="#ffb86b" />
+                        <circle cx="13" cy="13" r="2" fill="#000" />
+                        <circle cx="27" cy="13" r="2" fill="#000" />
+                        <path d="M12 23c3 2 13 2 16 0" stroke="#000" stroke-linecap="round" stroke-width="2"
+                            fill="none" />
+                        <path d="M6 8c-4-4-8 0-6 6" stroke="#ffb86b" stroke-width="3" stroke-linecap="round" />
+                        <path d="M34 8c4-4 8 0 6 6" stroke="#ffb86b" stroke-width="3" stroke-linecap="round" />
+                    </g>
+                </svg>
+            </div>
+            <div>
+                <div style="font-weight:700">Tijger Knuffel Co.</div>
+                <div class="muted" style="font-size:12px">Knuffel vibes only</div>
+            </div>
+        </div>
+        <nav>
+            <a href="#product">Product</a>
+            <a href="#cart">Winkelmandje</a>
+            <a href="#about">Info</a>
+            <a href="#cart" title="Open winkelmandje">🧺 <span id="cart-count" class="cart-badge"
+                    style="display:none">0</span></a>
+        </nav>
+    </header>
+
+    <main id="app">
+        <!-- product pagina -->
+        <section id="product" class="page">
+            <div class="product">
+                <div class="card">
+                    <div class="img-wrap">
+                        <!-- eenvoudige grotere illustratie -->
+                        <svg width="280" height="220" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden>
+                            <rect width="100%" height="100%" rx="18" fill="#fff9f5" />
+                            <g transform="translate(80,40)">
+                                <ellipse cx="80" cy="80" rx="72" ry="60" fill="#ffb86b" />
+                                <circle cx="52" cy="68" r="8" fill="#000" />
+                                <circle cx="108" cy="68" r="8" fill="#000" />
+                                <path d="M60 114c6 4 36 4 42 0" stroke="#000" stroke-width="3" stroke-linecap="round"
+                                    fill="none" />
+                                <path d="M26 34c-10-10-24 0-18 18" stroke="#ffb86b" stroke-width="6"
+                                    stroke-linecap="round" />
+                                <path d="M134 34c10-10 24 0 18 18" stroke="#ffb86b" stroke-width="6"
+                                    stroke-linecap="round" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <div class="name">Zachte Tijger Knuffel (40 cm)</div>
+                        <div class="price">€29.95</div>
+                        <p class="desc">Deze knuffel is super zacht, veilig voor kinderen en perfect als sfeer maker op
+                            je bed. Gemaakt van hypoallergene materialen en met de hand getest voor extra
+                            knuffelbaarheid.</p>
+                        <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
+                            <div class="qty">
+                                <button id="dec">-</button>
+                                <div id="qty" style="min-width:28px;text-align:center;font-weight:700">1</div>
+                                <button id="inc">+</button>
+                            </div>
+                            <button id="add-to-cart">Voeg toe aan mandje</button>
+                        </div>
+                        <div style="margin-top:12px" class="muted">Gratis verzending vanaf €50</div>
+                    </div>
+
+                    <div style="margin-top:14px" class="card muted">
+                        <strong>Snelle tip:</strong> verander de hoeveelheid vóór je toevoegen. Het mandje onthoudt je
+                        spullen (lokale opslag).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- cart pagina -->
+        <section id="cart" class="page" style="display:none">
+            <div class="card">
+                <h2>Winkelmandje</h2>
+                <div id="cart-contents" class="cart-list muted">Je mandje is leeg.</div>
+                <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
+                    <div class="muted">Let op: dit is een demo checkout — geen echte betalingen.</div>
+                    <div>
+                        <button id="clear-cart"
+                            style="background:#eee;color:#333;padding:8px 12px;border-radius:10px;border:1px solid #ddd">Leeg
+                            mandje</button>
+                        <button id="checkout" style="margin-left:8px">Afrekenen</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- about -->
+        <section id="about" class="page" style="display:none">
+            <div class="card">
+                <h2>Waarom verkopen we tijgers?</h2>
+                <p class="muted">Geen zorgen hoor, het zijn maar knuffeltijgers.</p>
+                <p class="muted">Wij gaan deze knuffeltijgers verkopen omdat er veel kinderen bang zijn. Dat komt
+                    voornamelijk voor in de avond. Ons doel met deze knuffeltijgers is dat de kinderen zich veiliger
+                    voelen als ze gaan slapen.</p>
+                <p class="muted">Tijgers zijn in kinderfilms vaak sterke dieren met veel kracht. Hierdoor voelen
+                    kinderen zich veiliger wanneer zo’n sterk beest naast hen ligt.</p>
+                <p class="muted">De knuffeltijger wordt verkocht in een mooie grote doos met een doorzichtige voorkant.
+                    In de voorkant zit een klein gat waardoor je de zachte vacht kunt voelen.</p>
+                <p class="muted">Deze tijger heeft ook zijn eigen specialiteiten. Je kan bijvoorbeeld aan zijn staart
+                    trekken en dan komt er licht uit de ogen van deze tijger.</p>
+            </div>
+        </section>
+
+        <!-- checkout (fake) -->
+        <section id="checkout" class="page" style="display:none">
+            <div class="card">
+                <h2>Checkout</h2>
+                <div id="checkout-summary" class="muted"></div>
+                <div style="margin-top:12px">
+                    <button id="confirm-order">Bestelling bevestigen</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="cookieBanner" class="cookie-banner" style="display:none">
+        <div style="display:flex;gap:12px;align-items:center">
+            <div>🍪</div>
+            <div>
+                <div style="font-weight:700">Cookies & Privacy</div>
+                <div class="muted" style="font-size:13px">We gebruiken cookies om je winkelmandje te onthouden en voor
+                    een betere ervaring. Geen tracking zonder toestemming.</div>
+            </div>
+        </div>
+        <div class="cookie-actions">
+            <button id="rejectCookies"
+                style="background:white;border:1px solid #ddd;padding:8px;border-radius:8px">Weiger</button>
+            <button id="acceptCookies">Accepteer</button>
+        </div>
+    </div>
+
+    <footer>
+        © Tijger Knuffel Co. — Demo site
+    </footer>
+
+    <script>
+        // --- eenvoudige routing op hash ---
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(s => s.style.display = 'none');
+            const el = document.getElementById(id) || document.getElementById('product');
+            el.style.display = 'block';
+            window.location.hash = '#' + id;
+        }
+
+        function initRouting() {
+            const hash = (location.hash || '#product').replace('#', '');
+            showPage(hash);
+            window.addEventListener('hashchange', () => { const h = (location.hash || '#product').replace('#', ''); showPage(h); });
+        }
+
+        // --- cart logic (localStorage) ---
+        const STORAGE_KEY = 'tk_cart_v1';
+        function readCart() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {} } catch (e) { return {} }
+        }
+        function writeCart(cart) { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); renderCartCount(); }
+
+        const product = { id: 'tijger-40', name: 'Zachte Tijger Knuffel (40 cm)', price: 29.95 };
+
+        function addToCart(prodId, qty) {
+            const cart = readCart();
+            if (!cart[prodId]) cart[prodId] = { ...product, qty: 0 };
+            cart[prodId].qty += qty;
+            if (cart[prodId].qty <= 0) delete cart[prodId];
+            writeCart(cart);
+            showToast('Toegevoegd aan je mandje!');
+        }
+
+        function removeFromCart(prodId) { const cart = readCart(); delete cart[prodId]; writeCart(cart); renderCartPage(); }
+        function updateQty(prodId, qty) { const cart = readCart(); if (cart[prodId]) { cart[prodId].qty = qty; if (qty <= 0) delete cart[prodId]; writeCart(cart); renderCartPage(); } }
+
+        function renderCartCount() {
+            const cart = readCart(); const count = Object.values(cart).reduce((s, i) => s + i.qty, 0);
+            const el = document.getElementById('cart-count');
+            if (count > 0) { el.style.display = 'inline-block'; el.textContent = count; } else el.style.display = 'none';
+        }
+
+        function renderCartPage() {
+            const container = document.getElementById('cart-contents'); const cart = readCart();
+            if (Object.keys(cart).length === 0) { container.innerHTML = 'Je mandje is leeg.'; return; }
+            const list = Object.values(cart).map(item => {
+                return `<div class="cart-item card">
+          <div class="thumb" aria-hidden>
+            <svg width="48" height="48" viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="28" ry="22" fill="#ffb86b"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:700">${escapeHtml(item.name)}</div>
+            <div class="muted">€${(item.price).toFixed(2)} × ${item.qty}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+            <div style="font-weight:700">€${(item.price * item.qty).toFixed(2)}</div>
+            <div style="display:flex;gap:6px">
+              <button onclick="decreaseItem('${item.id}')">-</button>
+              <button onclick="increaseItem('${item.id}')">+</button>
+              <button onclick="removeFromCart('${item.id}')" style="background:#fff;border:1px solid #ffd2a6;padding:6px;border-radius:8px">Verwijder</button>
+            </div>
+          </div>
+        </div>`;
+            }).join('');
+            const total = Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0);
+            container.innerHTML = list + `<div style="margin-top:12px;text-align:right;font-weight:700">Totaal: €${total.toFixed(2)}</div>`;
+        }
+
+        // small helpers for item qty controls used in inline onclick
+        function increaseItem(id) { const cart = readCart(); if (cart[id]) { cart[id].qty += 1; writeCart(cart); renderCartPage(); } }
+        function decreaseItem(id) { const cart = readCart(); if (cart[id]) { cart[id].qty -= 1; if (cart[id].qty <= 0) delete cart[id]; writeCart(cart); renderCartPage(); } }
+
+        // --- interactions ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initRouting();
+            renderCartCount();
+
+            // qty controls on product
+            let qty = 1;
+            const qtyEl = document.getElementById('qty');
+            document.getElementById('inc').addEventListener('click', () => { qty++; qtyEl.textContent = qty });
+            document.getElementById('dec').addEventListener('click', () => { qty = Math.max(1, qty - 1); qtyEl.textContent = qty });
+            document.getElementById('add-to-cart').addEventListener('click', () => { addToCart(product.id, qty); });
+
+            // cart page actions
+            document.getElementById('clear-cart').addEventListener('click', () => { localStorage.removeItem(STORAGE_KEY); renderCartPage(); renderCartCount(); showToast('Mandje is geleegd'); });
+            document.getElementById('checkout').addEventListener('click', () => { showCheckout(); });
+            document.getElementById('confirm-order').addEventListener('click', () => { localStorage.removeItem(STORAGE_KEY); renderCartCount(); showToast('Bestelling geplaatst 🎉 (demo)'); showPage('product'); });
+
+            // cookie banner
+            initCookieBanner();
+
+            // when navigating to cart hash, render
+            window.addEventListener('hashchange', () => { if (location.hash === '#cart') renderCartPage(); if (location.hash === '#checkout') showCheckout(); });
+        });
+
+        function showCheckout() { const cart = readCart(); const total = Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0); document.getElementById('checkout-summary').innerHTML = Object.keys(cart).length ? `Totaal: €${total.toFixed(2)}<div class="muted">(Demo checkout — geen echte betaling)</div>` : 'Je mandje is leeg.'; showPage('checkout'); }
+
+        // cookie consent
+        function setCookie(name, value, days) { const d = new Date(); d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000)); document.cookie = name + "=" + value + ";expires=" + d.toUTCString() + ";path=/"; }
+        function getCookie(name) { const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)'); return v ? v.pop() : null; }
+
+        function initCookieBanner() {
+            const banner = document.getElementById('cookieBanner'); const consent = getCookie('tk_cookie_consent');
+            if (!consent) { banner.style.display = 'flex'; }
+            document.getElementById('acceptCookies').addEventListener('click', () => { setCookie('tk_cookie_consent', 'accepted', 365); banner.style.display = 'none'; showToast('Cookies geaccepteerd'); });
+            document.getElementById('rejectCookies').addEventListener('click', () => { setCookie('tk_cookie_consent', 'rejected', 365); banner.style.display = 'none'; showToast('Cookies geweigerd — alleen functionele cookies zijn actief'); });
+        }
+
+        // small toast
+        function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.position = 'fixed'; t.style.left = '50%'; t.style.transform = 'translateX(-50%)'; t.style.bottom = '92px'; t.style.background = '#111'; t.style.color = '#fff'; t.style.padding = '10px 14px'; t.style.borderRadius = '10px'; t.style.opacity = '0'; t.style.transition = 'opacity .2s, bottom .2s'; document.body.appendChild(t); requestAnimationFrame(() => { t.style.opacity = '1'; t.style.bottom = '102px'; }); setTimeout(() => { t.style.opacity = '0'; t.style.bottom = '82px'; setTimeout(() => t.remove(), 300); }, 1800); }
+
+        // safe-ish escape for template
+        function escapeHtml(str) { return String(str).replace(/[&<>\"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#39;" })[s]); }
+
+        // expose some for inline handlers
+        window.removeFromCart = removeFromCart;
+        window.increaseItem = increaseItem;
+        window.decreaseItem = decreaseItem;
+    </script>
+</body>
+
+</html>
