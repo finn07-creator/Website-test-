@@ -228,7 +228,6 @@
             color: var(--muted);
         }
 
-        /* --- MOBIEL FIX --- */
         @media(max-width:800px) {
             .product {
                 display: block;
@@ -268,15 +267,12 @@
             display: none;
         }
     </style>
-
-
 </head>
 
 <body>
     <header>
         <div class="brand">
             <div style="font-weight:700">Tijger Knuffel</div>
-            <div class="muted" style="font-size:12px"></div>
         </div>
         <nav>
             <a href="#product">Product</a>
@@ -301,13 +297,14 @@
                         <p class="desc">Deze knuffel is super zacht, veilig voor kinderen en perfect als sfeer maker op
                             je bed. Gemaakt van hypoallergene materialen.</p>
                         <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
-                            <div class="qty">
-                                <button id="dec">-</button>
-                                <div id="qty" style="min-width:28px;text-align:center;font-weight:700">1</div>
-                                <button id="inc">+</button>
+                            <div class="qty"><button id="dec">-</button>
+                                <div id="qty" style="min-width:28px;text-align:center;font-weight:700">1</div><button
+                                    id="inc">+</button>
                             </div>
                             <button id="add-to-cart">Voeg toe aan mandje</button>
                         </div>
+                        <!-- Desktop Buy Now -->
+                        <button id="buy-now-desktop" style="margin-top:12px">Buy Now</button>
                         <!-- Mobiel Buy Now knop -->
                         <button id="buy-now-mobile" class="mobile-only">Buy Now</button>
                     </div>
@@ -317,17 +314,13 @@
             </div>
         </section>
 
-
         <section id="cart" class="page">
             <div class="card">
                 <h2>Winkelmandje</h2>
                 <div id="cart-contents" class="cart-list muted">Je mandje is leeg.</div>
                 <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
-                    <div class="muted"></div>
-                    <div>
-                        <button id="clear-cart">Leeg mandje</button>
-                        <button id="checkout" style="margin-left:8px">Afrekenen</button>
-                    </div>
+                    <button id="clear-cart">Leeg mandje</button>
+                    <button id="checkout">Afrekenen</button>
                 </div>
             </div>
         </section>
@@ -338,8 +331,6 @@
                 <p class="muted">Geen zorgen, het zijn maar knuffeltijgers! ...</p>
             </div>
         </section>
-
-
     </main>
 
     <footer></footer>
@@ -359,83 +350,62 @@
         function renderCartCount() { const cart = readCart(); const count = Object.values(cart).reduce((s, i) => s + i.qty, 0); const el = document.getElementById('cart-count'); if (count > 0) { el.style.display = 'inline-block'; el.textContent = count; } else el.style.display = 'none'; }
 
         function renderCartPage() {
-            const container = document.getElementById('cart-contents'); const cart = readCart();
-            if (Object.keys(cart).length === 0) { container.textContent = 'Je mandje is leeg.'; return; }
-            container.innerHTML = '';
-            Object.values(cart).forEach(item => {
-                const div = document.createElement('div'); div.className = 'cart-item card';
-                div.innerHTML = '<div class="thumb">' + item.name[0] + '</div><div style="flex:1"><div style="font-weight:700">' + item.name + '</div><div class="muted">€' + item.price.toFixed(2) + ' × ' + item.qty + '</div></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><div style="font-weight:700">€' + (item.price * item.qty).toFixed(2) + '</div><div style="display:flex;gap:6px"></div></div>';
+            const container = document.getElementById('cart-contents'); const cart = readCart(); if (Object.keys(cart).length === 0) { container.textContent = 'Je mandje is leeg.'; return; }
+            container.innerHTML = ''; Object.values(cart).forEach(item => {
+                const div = document.createElement('div'); div.className = 'cart-item card'; div.innerHTML = '<div class="thumb">' + item.name[0] + '</div><div style="flex:1"><div style="font-weight:700">' + item.name + '</div><div class="muted">€' + item.price.toFixed(2) + ' × ' + item.qty + '</div></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><div style="font-weight:700">€' + (item.price * item.qty).toFixed(2) + '</div><div style="display:flex;gap:6px"></div></div>';
                 const btnDec = document.createElement('button'); btnDec.textContent = '-'; btnDec.onclick = () => decreaseItem(item.id);
                 const btnInc = document.createElement('button'); btnInc.textContent = '+'; btnInc.onclick = () => increaseItem(item.id);
                 const btnRemove = document.createElement('button'); btnRemove.textContent = 'Verwijder'; btnRemove.style.background = '#000'; btnRemove.style.color = '#fff'; btnRemove.onclick = () => removeFromCart(item.id);
-                div.querySelector('div[style*="display:flex;gap:6px"]').append(btnDec, btnInc, btnRemove);
-                container.appendChild(div);
+                div.querySelector('div[style*="display:flex;gap:6px"]').append(btnDec, btnInc, btnRemove); container.appendChild(div);
             });
-            const total = Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0);
-            const totalDiv = document.createElement('div'); totalDiv.style.cssText = 'margin-top:12px;text-align:right;font-weight:700'; totalDiv.textContent = 'Totaal: €' + total.toFixed(2); container.appendChild(totalDiv);
+            const total = Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0); const totalDiv = document.createElement('div'); totalDiv.style.cssText = 'margin-top:12px;text-align:right;font-weight:700'; totalDiv.textContent = 'Totaal: €' + total.toFixed(2); container.appendChild(totalDiv);
         }
 
         function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); const el = document.getElementById(id) || document.getElementById('product'); el.classList.add('active'); window.location.hash = '#' + id; if (id === 'cart') renderCartPage(); }
         function initRouting() { const hash = (location.hash || '#product').replace('#', ''); showPage(hash); window.addEventListener('hashchange', () => { showPage((location.hash || '#product').replace('#', '')); }); }
 
-        function showToast(msg) {
-            const t = document.createElement('div'); t.textContent = msg; t.style.position = 'fixed'; t.style.left = '50%'; t.style.transform = 'translateX(-50%)'; t.style.bottom = '92px'; t.style.background = '#111'; t.style.color = '#fff'; t.style.padding = '10px 14px'; t.style.borderRadius = '10px'; t.style.opacity = '0'; t.style.transition = 'opacity .2s,bottom .2s'; document.body.appendChild(t);
-            requestAnimationFrame(() => { t.style.opacity = '1'; t.style.bottom = '102px'; });
-            setTimeout(() => { t.style.opacity = '0'; t.style.bottom = '82px'; setTimeout(() => t.remove(), 300); }, 1800);
-        }
+        function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.position = 'fixed'; t.style.left = '50%'; t.style.transform = 'translateX(-50%)'; t.style.bottom = '92px'; t.style.background = '#111'; t.style.color = '#fff'; t.style.padding = '10px 14px'; t.style.borderRadius = '10px'; t.style.opacity = '0'; t.style.transition = 'opacity .2s,bottom .2s'; document.body.appendChild(t); requestAnimationFrame(() => { t.style.opacity = '1'; t.style.bottom = '102px'; }); setTimeout(() => { t.style.opacity = '0'; t.style.bottom = '82px'; setTimeout(() => t.remove(), 300); }, 1800); }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initRouting();
-            renderCartCount();
-
+            initRouting(); renderCartCount();
             document.getElementById('inc').addEventListener('click', () => { qty++; document.getElementById('qty').textContent = qty; });
             document.getElementById('dec').addEventListener('click', () => { qty = Math.max(1, qty - 1); document.getElementById('qty').textContent = qty; });
             document.getElementById('add-to-cart').addEventListener('click', addToCart);
             document.getElementById('clear-cart').addEventListener('click', () => { localStorage.removeItem(STORAGE_KEY); renderCartPage(); renderCartCount(); showToast('Mandje is geleegd'); });
 
-            // STRIPE CHECKOUT met check op lege mandje
-            function checkout() {
-                const cart = readCart();
-                if (Object.keys(cart).length === 0) {
-                    showToast('Je mandje is leeg!');
-                    return;
-                }
-                const STRIPE_URL = ''; // hier vervang je met jouw Stripe link
-                window.location.href = STRIPE_URL;
-            }
+            // CHECKOUT functie
+            function checkout() { const cart = readCart(); if (Object.keys(cart).length === 0) { showToast('Je mandje is leeg!'); return; } const STRIPE_URL = ''; window.location.href = STRIPE_URL; }
             document.getElementById('checkout').addEventListener('click', checkout);
 
-            // MOBIEL BUY NOW met check op lege mandje
+            // Desktop Buy Now
+            document.getElementById('buy-now-desktop').addEventListener('click', () => {
+                addToCart(); checkout();
+            });
+
+            // Mobiel Buy Now
             document.getElementById('buy-now-mobile').addEventListener('click', () => {
-                addToCart();
-                checkout();
+                addToCart(); checkout();
             });
 
             // FOTO SWITCH
             const images = ['', 'https://example.com/afbeelding2.png', 'https://example.com/afbeelding3.png'];
             let currentImg = 0;
             const productImg = document.getElementById('product-img');
-            document.getElementById('switch-img').addEventListener('click', () => {
-                currentImg = (currentImg + 1) % images.length; productImg.src = images[currentImg];
-            });
+            document.getElementById('switch-img').addEventListener('click', () => { currentImg = (currentImg + 1) % images.length; productImg.src = images[currentImg]; });
 
-            // THEMA TOGGLE inclusief prijs update
+            // THEMA TOGGLE
             let darkMode = false;
             const applyTheme = () => {
                 document.body.style.background = darkMode ? 'var(--bg-dark)' : 'var(--bg-light)';
                 document.body.style.color = darkMode ? 'var(--text-dark)' : 'var(--text-light)';
                 document.querySelectorAll('.card').forEach(c => { c.style.background = darkMode ? '#222' : 'var(--card)'; c.style.color = darkMode ? '#fff' : 'var(--text-light)'; });
-                document.querySelectorAll('button').forEach(b => {
-                    if (b.classList.contains('switch-btn')) { b.style.background = darkMode ? '#fff' : '#000'; b.style.color = darkMode ? '#000' : '#fff'; }
-                    else { b.style.background = darkMode ? '#fff' : '#000'; b.style.color = darkMode ? '#000' : '#fff'; }
-                });
+                document.querySelectorAll('button').forEach(b => { if (b.classList.contains('switch-btn')) { b.style.background = darkMode ? '#fff' : '#000'; b.style.color = darkMode ? '#000' : '#fff'; } else { b.style.background = darkMode ? '#fff' : '#000'; b.style.color = darkMode ? '#000' : '#fff'; } });
                 document.querySelector('header').style.background = darkMode ? '#222' : '#fff';
                 const priceEl = document.getElementById('product-price'); if (priceEl) priceEl.style.color = darkMode ? '#fff' : 'var(--text-light)';
             };
             applyTheme();
             document.getElementById('themeToggle').addEventListener('click', () => { darkMode = !darkMode; applyTheme(); });
         });
-
         window.removeFromCart = removeFromCart;
         window.increaseItem = increaseItem;
         window.decreaseItem = decreaseItem;
