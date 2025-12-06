@@ -393,12 +393,22 @@
             document.getElementById('add-to-cart').addEventListener('click', addToCart);
             document.getElementById('clear-cart').addEventListener('click', () => { localStorage.removeItem(STORAGE_KEY); renderCartPage(); renderCartCount(); showToast('Mandje is geleegd'); });
 
-            // STRIPE CHECKOUT
-            document.getElementById('checkout').addEventListener('click', () => { const STRIPE_URL = ''; window.location.href = STRIPE_URL; });
+            // STRIPE CHECKOUT met check op lege mandje
+            function checkout() {
+                const cart = readCart();
+                if (Object.keys(cart).length === 0) {
+                    showToast('Je mandje is leeg!');
+                    return;
+                }
+                const STRIPE_URL = ''; // hier vervang je met jouw Stripe link
+                window.location.href = STRIPE_URL;
+            }
+            document.getElementById('checkout').addEventListener('click', checkout);
 
-            // MOBIEL BUY NOW
+            // MOBIEL BUY NOW met check op lege mandje
             document.getElementById('buy-now-mobile').addEventListener('click', () => {
-                addToCart(); const STRIPE_URL = ''; window.location.href = STRIPE_URL;
+                addToCart();
+                checkout();
             });
 
             // FOTO SWITCH
