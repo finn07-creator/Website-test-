@@ -251,6 +251,21 @@
             nav a {
                 display: none;
             }
+
+            .mobile-only {
+                display: block;
+                width: 100%;
+                padding: 12px 0;
+                font-size: 18px;
+                margin-top: 12px;
+                border-radius: 10px;
+                background: var(--accent);
+                color: var(--text-dark);
+            }
+        }
+
+        .mobile-only {
+            display: none;
         }
     </style>
 
@@ -258,7 +273,6 @@
 </head>
 
 <body>
-
     <header>
         <div class="brand">
             <div style="font-weight:700">Tijger Knuffel</div>
@@ -294,6 +308,8 @@
                             </div>
                             <button id="add-to-cart">Voeg toe aan mandje</button>
                         </div>
+                        <!-- Mobiel Buy Now knop -->
+                        <button id="buy-now-mobile" class="mobile-only">Buy Now</button>
                     </div>
                     <div style="margin-top:14px" class="card muted" id="tip-card"><strong>Gratis verzending vanaf
                             €50</strong></div>
@@ -378,59 +394,36 @@
             document.getElementById('clear-cart').addEventListener('click', () => { localStorage.removeItem(STORAGE_KEY); renderCartPage(); renderCartCount(); showToast('Mandje is geleegd'); });
 
             // STRIPE CHECKOUT
-            document.getElementById('checkout').addEventListener('click', () => {
-                const STRIPE_URL = ''; // hier vervang je met jouw Stripe link
-                window.location.href = STRIPE_URL;
+            document.getElementById('checkout').addEventListener('click', () => { const STRIPE_URL = ''; window.location.href = STRIPE_URL; });
+
+            // MOBIEL BUY NOW
+            document.getElementById('buy-now-mobile').addEventListener('click', () => {
+                addToCart(); const STRIPE_URL = ''; window.location.href = STRIPE_URL;
             });
 
             // FOTO SWITCH
-            const images = [
-                '',
-                'https://example.com/afbeelding2.png',
-                'https://example.com/afbeelding3.png'
-            ];
+            const images = ['', 'https://example.com/afbeelding2.png', 'https://example.com/afbeelding3.png'];
             let currentImg = 0;
             const productImg = document.getElementById('product-img');
             document.getElementById('switch-img').addEventListener('click', () => {
-                currentImg = (currentImg + 1) % images.length;
-                productImg.src = images[currentImg];
+                currentImg = (currentImg + 1) % images.length; productImg.src = images[currentImg];
             });
-
-
 
             // THEMA TOGGLE inclusief prijs update
             let darkMode = false;
             const applyTheme = () => {
                 document.body.style.background = darkMode ? 'var(--bg-dark)' : 'var(--bg-light)';
                 document.body.style.color = darkMode ? 'var(--text-dark)' : 'var(--text-light)';
-
-                document.querySelectorAll('.card').forEach(c => {
-                    c.style.background = darkMode ? '#222' : 'var(--card)';
-                    c.style.color = darkMode ? '#fff' : 'var(--text-light)';
-                });
-
+                document.querySelectorAll('.card').forEach(c => { c.style.background = darkMode ? '#222' : 'var(--card)'; c.style.color = darkMode ? '#fff' : 'var(--text-light)'; });
                 document.querySelectorAll('button').forEach(b => {
-                    if (b.classList.contains('switch-btn')) {
-                        b.style.background = darkMode ? '#fff' : '#000';
-                        b.style.color = darkMode ? '#000' : '#fff';
-                    } else {
-                        b.style.background = darkMode ? '#fff' : '#000';
-                        b.style.color = darkMode ? '#000' : '#fff';
-                    }
+                    if (b.classList.contains('switch-btn')) { b.style.background = darkMode ? '#fff' : '#000'; b.style.color = darkMode ? '#000' : '#fff'; }
+                    else { b.style.background = darkMode ? '#fff' : '#000'; b.style.color = darkMode ? '#000' : '#fff'; }
                 });
-
                 document.querySelector('header').style.background = darkMode ? '#222' : '#fff';
-
-                // prijs ook aanpassen
-                const priceEl = document.getElementById('product-price');
-                if (priceEl) priceEl.style.color = darkMode ? '#fff' : 'var(--text-light)';
+                const priceEl = document.getElementById('product-price'); if (priceEl) priceEl.style.color = darkMode ? '#fff' : 'var(--text-light)';
             };
-
             applyTheme();
-            document.getElementById('themeToggle').addEventListener('click', () => {
-                darkMode = !darkMode;
-                applyTheme();
-            });
+            document.getElementById('themeToggle').addEventListener('click', () => { darkMode = !darkMode; applyTheme(); });
         });
 
         window.removeFromCart = removeFromCart;
