@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="nl">
 
 <head>
@@ -227,9 +228,24 @@
             color: var(--muted);
         }
 
+        /* --- MOBIEL FIX --- */
         @media(max-width:800px) {
             .product {
-                grid-template-columns: 1fr;
+                display: block;
+                gap: 16px;
+            }
+
+            .card.img-wrap {
+                height: auto;
+            }
+
+            .img-wrap img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            main {
+                padding: 16px;
             }
 
             nav a {
@@ -237,13 +253,15 @@
             }
         }
     </style>
+
+
 </head>
 
 <body>
 
     <header>
         <div class="brand">
-            <div style="font-weight:700">Tijger Knuffel </div>
+            <div style="font-weight:700">Tijger Knuffel</div>
             <div class="muted" style="font-size:12px"></div>
         </div>
         <nav>
@@ -251,7 +269,7 @@
             <a href="#cart">Winkelmandje</a>
             <a href="#about">Info</a>
             <button class="theme-toggle" id="themeToggle">Thema</button>
-            <a href="#cart"> <span id="cart-count" class="cart-badge" style="display:none">0</span></a>
+            <a href="#cart"><span id="cart-count" class="cart-badge" style="display:none">0</span></a>
         </nav>
     </header>
 
@@ -259,16 +277,15 @@
         <section id="product" class="page active">
             <div class="product">
                 <div class="card img-wrap">
-                    <img id="product-img" src=".........." alt="Tijger Knuffel">
+                    <img id="product-img" src="" alt="Tijger Knuffel">
                     <button id="switch-img" class="switch-btn">Wissel afbeelding</button>
                 </div>
                 <div>
                     <div class="card">
                         <div class="name">Zachte Tijger Knuffel 1 m</div>
-                        <div class="price">€39.99</div>
+                        <div class="price" id="product-price">€39.99</div>
                         <p class="desc">Deze knuffel is super zacht, veilig voor kinderen en perfect als sfeer maker op
-                            je bed. Gemaakt van hypoallergene materialen.
-                        </p>
+                            je bed. Gemaakt van hypoallergene materialen.</p>
                         <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
                             <div class="qty">
                                 <button id="dec">-</button>
@@ -283,6 +300,7 @@
                 </div>
             </div>
         </section>
+
 
         <section id="cart" class="page">
             <div class="card">
@@ -301,63 +319,31 @@
         <section id="about" class="page">
             <div class="card">
                 <h2>Waarom verkopen we tijgers?</h2>
-                <p class="muted">Geen zorgen, het zijn maar knuffeltijgers!
-
-                    We verkopen deze knuffeltijgers omdat veel kinderen bang zijn, vooral 's avonds. Ons doel is dat
-                    kinderen zich veiliger voelen als ze gaan slapen. Tijgers zijn vaak krachtige dieren in kinderfilms,
-                    en daardoor voelt het kind zich gerustgesteld met zo'n sterk beestje naast zich.
-
-                    Elke knuffel wordt geleverd in een mooie, grote doos met een doorzichtige voorkant. In de voorkant
-                    zit een klein gat zodat je de zachte vacht kunt voelen. Deze tijger heeft ook zijn eigen
-                    specialiteiten: bijvoorbeeld, als je aan zijn staart trekt, komt er licht uit de ogen van de
-                    knuffel.
-                </p>
+                <p class="muted">Geen zorgen, het zijn maar knuffeltijgers! ...</p>
             </div>
         </section>
+
+
     </main>
 
     <footer></footer>
 
     <script>
-        // ---------- behoud originele data & keys ----------
         const STORAGE_KEY = 'tk_cart_perfect';
         const product = { id: 'tijger-40', name: 'Zachte Tijger Knuffel 1 m', price: 39.99 };
         let qty = 1;
 
-        // ---------- helpers ----------
-        function readCart() {
-            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {} }
-            catch (e) { return {} }
-        }
-        function writeCart(cart) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-            renderCartCount();
-            renderCartPage();
-        }
-
-        // ---------- cart ops ----------
-        function addToCart() {
-            const cart = readCart();
-            if (!cart[product.id]) cart[product.id] = { ...product, qty: 0 };
-            cart[product.id].qty += qty;
-            writeCart(cart);
-            showToast('Toegevoegd!');
-        }
+        function readCart() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {} } catch (e) { return {} } }
+        function writeCart(cart) { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); renderCartCount(); renderCartPage(); }
+        function addToCart() { const cart = readCart(); if (!cart[product.id]) cart[product.id] = { ...product, qty: 0 }; cart[product.id].qty += qty; writeCart(cart); showToast('Toegevoegd!'); }
         function removeFromCart(id) { const cart = readCart(); delete cart[id]; writeCart(cart); }
         function increaseItem(id) { const cart = readCart(); if (cart[id]) { cart[id].qty += 1; writeCart(cart); } }
         function decreaseItem(id) { const cart = readCart(); if (cart[id]) { cart[id].qty -= 1; if (cart[id].qty <= 0) delete cart[id]; writeCart(cart); } }
 
-        // ---------- renderers ----------
-        function renderCartCount() {
-            const cart = readCart();
-            const count = Object.values(cart).reduce((s, i) => s + i.qty, 0);
-            const el = document.getElementById('cart-count');
-            if (count > 0) { el.style.display = 'inline-block'; el.textContent = count; } else el.style.display = 'none';
-        }
+        function renderCartCount() { const cart = readCart(); const count = Object.values(cart).reduce((s, i) => s + i.qty, 0); const el = document.getElementById('cart-count'); if (count > 0) { el.style.display = 'inline-block'; el.textContent = count; } else el.style.display = 'none'; }
 
         function renderCartPage() {
-            const container = document.getElementById('cart-contents');
-            const cart = readCart();
+            const container = document.getElementById('cart-contents'); const cart = readCart();
             if (Object.keys(cart).length === 0) { container.textContent = 'Je mandje is leeg.'; return; }
             container.innerHTML = '';
             Object.values(cart).forEach(item => {
@@ -373,59 +359,35 @@
             const totalDiv = document.createElement('div'); totalDiv.style.cssText = 'margin-top:12px;text-align:right;font-weight:700'; totalDiv.textContent = 'Totaal: €' + total.toFixed(2); container.appendChild(totalDiv);
         }
 
-        // ---------- routing (houdt dezelfde behavior) ----------
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const el = document.getElementById(id) || document.getElementById('product');
-            el.classList.add('active');
-            window.location.hash = '#' + id;
-            if (id === 'cart') renderCartPage();
-        }
-        function initRouting() {
-            const hash = (location.hash || '#product').replace('#', '');
-            showPage(hash);
-            window.addEventListener('hashchange', () => {
-                showPage((location.hash || '#product').replace('#', ''));
-            });
-        }
+        function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); const el = document.getElementById(id) || document.getElementById('product'); el.classList.add('active'); window.location.hash = '#' + id; if (id === 'cart') renderCartPage(); }
+        function initRouting() { const hash = (location.hash || '#product').replace('#', ''); showPage(hash); window.addEventListener('hashchange', () => { showPage((location.hash || '#product').replace('#', '')); }); }
 
-        // ---------- toast ----------
         function showToast(msg) {
             const t = document.createElement('div'); t.textContent = msg; t.style.position = 'fixed'; t.style.left = '50%'; t.style.transform = 'translateX(-50%)'; t.style.bottom = '92px'; t.style.background = '#111'; t.style.color = '#fff'; t.style.padding = '10px 14px'; t.style.borderRadius = '10px'; t.style.opacity = '0'; t.style.transition = 'opacity .2s,bottom .2s'; document.body.appendChild(t);
             requestAnimationFrame(() => { t.style.opacity = '1'; t.style.bottom = '102px'; });
             setTimeout(() => { t.style.opacity = '0'; t.style.bottom = '82px'; setTimeout(() => t.remove(), 300); }, 1800);
         }
 
-        // ---------- DOM ready ----------
         document.addEventListener('DOMContentLoaded', () => {
             initRouting();
             renderCartCount();
 
-            // qty buttons (onbeperkt hetzelfde as before)
             document.getElementById('inc').addEventListener('click', () => { qty++; document.getElementById('qty').textContent = qty; });
             document.getElementById('dec').addEventListener('click', () => { qty = Math.max(1, qty - 1); document.getElementById('qty').textContent = qty; });
             document.getElementById('add-to-cart').addEventListener('click', addToCart);
+            document.getElementById('clear-cart').addEventListener('click', () => { localStorage.removeItem(STORAGE_KEY); renderCartPage(); renderCartCount(); showToast('Mandje is geleegd'); });
 
-            document.getElementById('clear-cart').addEventListener('click', () => {
-                localStorage.removeItem(STORAGE_KEY);
-                renderCartPage();
-                renderCartCount();
-                showToast('Mandje is geleegd');
-            });
-
-            // ---------- STRIPE CHECKOUT ----------
+            // STRIPE CHECKOUT
             document.getElementById('checkout').addEventListener('click', () => {
-                // VERVANG hieronder met jouw echte Stripe-checkout link
-                const STRIPE_URL = 'https://www.youtube.com';
-                // maak eerst totaal uit de cart en eventueel query param (optioneel)
-                // je kan hier ook total via query meegeven: ?total=xx
+                const STRIPE_URL = ''; // hier vervang je met jouw Stripe link
                 window.location.href = STRIPE_URL;
             });
 
-            // ---------- FOTO SWITCH FIX (werkt goed) ----------
+            // FOTO SWITCH
             const images = [
-                '........',
-                '....'
+                '',
+                'https://example.com/afbeelding2.png',
+                'https://example.com/afbeelding3.png'
             ];
             let currentImg = 0;
             const productImg = document.getElementById('product-img');
@@ -434,10 +396,10 @@
                 productImg.src = images[currentImg];
             });
 
-            // ---------- PERFECT THEMA (zelfde vibe als je wilde, maar bugfree) ----------
-            // we track darkMode boolean zodat toggles betrouwbaar werken
-            let darkMode = false;
 
+
+            // THEMA TOGGLE inclusief prijs update
+            let darkMode = false;
             const applyTheme = () => {
                 document.body.style.background = darkMode ? 'var(--bg-dark)' : 'var(--bg-light)';
                 document.body.style.color = darkMode ? 'var(--text-dark)' : 'var(--text-light)';
@@ -447,9 +409,7 @@
                     c.style.color = darkMode ? '#fff' : 'var(--text-light)';
                 });
 
-                // update ALL buttons including the theme-toggle itself
                 document.querySelectorAll('button').forEach(b => {
-                    // keep switch button inverse for visibility like before
                     if (b.classList.contains('switch-btn')) {
                         b.style.background = darkMode ? '#fff' : '#000';
                         b.style.color = darkMode ? '#000' : '#fff';
@@ -459,25 +419,25 @@
                     }
                 });
 
-                // header background
                 document.querySelector('header').style.background = darkMode ? '#222' : '#fff';
+
+                // prijs ook aanpassen
+                const priceEl = document.getElementById('product-price');
+                if (priceEl) priceEl.style.color = darkMode ? '#fff' : 'var(--text-light)';
             };
 
-            // initial apply (in case)
             applyTheme();
-
             document.getElementById('themeToggle').addEventListener('click', () => {
                 darkMode = !darkMode;
                 applyTheme();
             });
-
         });
 
-        // expose for inline handlers (blijft hetzelfde)
         window.removeFromCart = removeFromCart;
         window.increaseItem = increaseItem;
         window.decreaseItem = decreaseItem;
     </script>
+
 </body>
 
 </html>
